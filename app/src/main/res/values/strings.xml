@@ -1,0 +1,34 @@
+<resources>
+    <string name="app_name">E-Farming</string>
+    <string name="app_home">Home</string>
+    <string name="app_dashBoard">DashBoard</string>
+    <string name="app_notifications">Notifications</string>
+
+    <string-array name="State">
+        <item>Maharashtra</item>
+        <item>Gujarat</item>
+    </string-array>
+
+    <string-array name="shipper">
+        <item>Shipper 1</item>
+        <item>Shipper 2</item>
+    </string-array>
+
+    <string-array name="Products">
+        <item>Onion</item>
+        <item>Potatoes</item>
+        <item>Ginger</item>
+        <item>Rice</item>
+        <item>Tomatoes</item>
+        <item>Apple</item>
+        <item>Orange</item>
+        <item>Grapes</item>
+        <item>Mango</item>
+        <item>Lemon</item>
+        <item>Pepper</item>
+        <item>Carrot</item>
+        <item>Lettuce</item>
+
+    </string-array>
+
+</resources>
