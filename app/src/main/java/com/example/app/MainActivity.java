@@ -56,20 +56,22 @@ public class MainActivity extends AppCompatActivity {
                     if(Fauth.getCurrentUser().isEmailVerified()){
                         Fauth = FirebaseAuth.getInstance();
 
-                        databaseReference = FirebaseDatabase.getInstance("https://e-farming-c93ab-default-rtdb.firebaseio.com/").getReference("User").child(FirebaseAuth.getInstance().getUid()+"/Role");
+                        databaseReference = FirebaseDatabase.getInstance("https://e-farming-c93ab-default-rtdb.firebaseio.com/").getReference("Users").child(FirebaseAuth.getInstance().getUid()+"/Role");
                         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
-                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                String role = snapshot.getValue(String.class);
+                            public void onDataChange(@NonNull DataSnapshot datasnapshot) {
+                                String role = datasnapshot.getValue(String.class);
                                 if(role.equals("Farmer")){
-                                    startActivity(new Intent(MainActivity.this,BottomNavigationFarmer.class));
+                                    Intent r = new Intent(MainActivity.this, BottomNavigationFarmer.class);
+                                    startActivity(r);
+                                    //startActivity(new Intent(MainActivity.this,BottomNavigationFarmer.class));
                                     finish();
                                 }
                             }
 
                             @Override
                             public void onCancelled(@NonNull DatabaseError databaseError ) {
-                                Toast.makeText(MainActivity.this, "error",Toast.LENGTH_SHORT).show();
+                                Toast.makeText(MainActivity.this, databaseError.getMessage(),Toast.LENGTH_SHORT).show();
 
                             }
                         });

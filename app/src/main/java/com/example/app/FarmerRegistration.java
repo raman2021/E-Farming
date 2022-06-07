@@ -88,7 +88,7 @@ public class FarmerRegistration extends AppCompatActivity {
                                         hashMap1.put("Email Address", emailF);
                                         hashMap1.put("Password", passF);
                                         hashMap1.put("Confirm Password", cpassF);
-                                        firebaseDatabase.getInstance().getReference("Farmer")
+                                        firebaseDatabase.getInstance("https://e-farming-c93ab-default-rtdb.firebaseio.com/").getReference("Farmer")
                                                 .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                                                 .setValue(hashMap1).addOnCompleteListener(new OnCompleteListener<Void>() {
                                                     @Override
@@ -101,12 +101,12 @@ public class FarmerRegistration extends AppCompatActivity {
                                                                     AlertDialog.Builder builder = new AlertDialog.Builder(FarmerRegistration.this);
                                                                     builder.setMessage("Done and verify your email");
                                                                     builder.setCancelable(false);
+                                                                   // builder.setPositiveButton("ok", ((dialog, which) ->
                                                                    builder.setPositiveButton("ok", new DialogInterface.OnClickListener() {
                                                                         @Override
                                                                         public void onClick(DialogInterface dialog, int which) {
                                                                             dialog.dismiss();
-                                                                            Intent b = new Intent(FarmerRegistration.this, FarmerPage.class);
-                                                                            startActivity(b);
+
                                                                         }
                                                                     });
 

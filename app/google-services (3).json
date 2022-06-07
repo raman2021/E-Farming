@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "807111859412",
+    "firebase_url": "https://e-farming-c93ab-default-rtdb.firebaseio.com",
     "project_id": "e-farming-c93ab",
     "storage_bucket": "e-farming-c93ab.appspot.com"
   },
@@ -13,6 +14,14 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "807111859412-4i8r11sbqkh142cgd13io1dreuvm9oht.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.app",
+            "certificate_hash": "b36df9ae3e381f3ac48ffc218834467a58db769d"
+          }
+        },
         {
           "client_id": "807111859412-3jrvk3n57i9qdvft410gdtn3tltmet4j.apps.googleusercontent.com",
           "client_type": 3
