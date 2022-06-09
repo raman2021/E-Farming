@@ -61,12 +61,18 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot datasnapshot) {
                                 String role = datasnapshot.getValue(String.class);
-                                if(role.equals("Farmer")){
-                                    Intent r = new Intent(MainActivity.this, BottomNavigationFarmer.class);
-                                    startActivity(r);
-                                    //startActivity(new Intent(MainActivity.this,BottomNavigationFarmer.class));
+                                if(role.equals("Farmer")) {
+                                    // Intent r = new Intent(MainActivity.this, BottomNavigationFarmer.class);
+                                    // startActivity(r);
+                                    startActivity(new Intent(MainActivity.this, BottomNavigationFarmer.class));
                                     finish();
                                 }
+
+                                    if(role.equals("Customer")){
+                                        startActivity(new Intent(MainActivity.this,BottomNavigationCustomer.class));
+                                        finish();
+                                    }
+
                             }
 
                             @Override
@@ -77,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
                         });
                     }else{
                         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                        builder.setMessage("have you verified yor mail");
+                        builder.setMessage("Welcome");
                         builder.setCancelable(false);
                         builder.setPositiveButton("ok", new DialogInterface.OnClickListener() {
                             @Override

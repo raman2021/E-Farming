@@ -62,7 +62,7 @@ public class FarmerPage extends AppCompatActivity {
                                         startActivity(F);
                                         finish();
                                     }else{
-                                        ReusableCodeForAll.ShowAlert(FarmerPage.this,"verification failed","wrong email");
+                                        ReusableCodeForAll.ShowAlert(FarmerPage.this,"verification failed","please verify your email");
                                     }
 
                                 }else{
@@ -74,6 +74,14 @@ public class FarmerPage extends AppCompatActivity {
                     }
                 }
             });
+            loginn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(new Intent(FarmerPage.this, BottomNavigationFarmer.class));
+                    finish();
+                }
+            });
+
         }catch (Exception e){
             Toast.makeText(this,e.getMessage(), Toast.LENGTH_SHORT).show();
         }

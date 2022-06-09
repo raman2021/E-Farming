@@ -16,6 +16,9 @@
         android:theme="@style/Theme.EFarming"
         tools:targetApi="31">
         <activity
+            android:name=".BottomNavigationCustomer"
+            android:exported="false" />
+        <activity
             android:name=".BottomNavigationFarmer"
             android:exported="false" />
         <activity

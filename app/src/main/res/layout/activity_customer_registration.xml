@@ -94,7 +94,7 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <LinearLayout
+         <!--   <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -118,7 +118,7 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
 
-            </LinearLayout>
+            </LinearLayout> -->
 
             <Button
                 android:id="@+id/Cregister"
