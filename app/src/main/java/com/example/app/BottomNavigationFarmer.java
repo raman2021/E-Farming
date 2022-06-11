@@ -43,7 +43,7 @@ public class BottomNavigationFarmer extends AppCompatActivity implements BottomN
         }
         return loadfarmerrfragment(fragment);
 
-        //return false;
+
     }
 
     private boolean loadfarmerrfragment(Fragment fragment) {
