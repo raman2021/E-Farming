@@ -16,6 +16,12 @@
         <entry key="..\:/Users/Raman/AndroidStudioProjects/EFarming/app/src/main/res/layout/activity_main.xml" value="0.18" />
         <entry key="..\:/Users/Raman/AndroidStudioProjects/EFarming/app/src/main/res/layout/activity_shop_page.xml" value="0.15806159420289856" />
         <entry key="..\:/Users/Raman/AndroidStudioProjects/EFarming/app/src/main/res/layout/activity_user_type.xml" value="0.15806159420289856" />
+        <entry key="..\:/Users/Raman/AndroidStudioProjects/EFarming/app/src/main/res/layout/farmerfrag.xml" value="0.17481884057971014" />
+        <entry key="..\:/Users/Raman/AndroidStudioProjects/EFarming/app/src/main/res/layout/farmerfragadditem.xml" value="0.2384428223844282" />
+        <entry key="..\:/Users/Raman/AndroidStudioProjects/EFarming/app/src/main/res/layout/farmerfragorders.xml" value="0.17481884057971014" />
+        <entry key="..\:/Users/Raman/AndroidStudioProjects/EFarming/app/src/main/res/layout/farmerfragpending.xml" value="0.17481884057971014" />
+        <entry key="..\:/Users/Raman/AndroidStudioProjects/EFarming/app/src/main/res/menu/farmer_nav.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/Raman/AndroidStudioProjects/EFarming/app/src/main/res/menu/logout.xml" value="0.20416666666666666" />
       </map>
     </option>
   </component>
