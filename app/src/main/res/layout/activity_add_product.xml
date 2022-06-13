@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".farmer.AddProduct">
+    <ImageButton
+        android:layout_width="130dp"
+        android:layout_height="130dp"
+        android:background="@drawable/camerabutton"
+        android:src="@drawable/camera"
+        android:id="@+id/Upload"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/linear"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <LinearLayout
+        android:layout_width="290dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/linear"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Upload"
+        app:layout_constraintVertical_bias="0.135">
+
+        <TextView
+            android:id="@+id/tV"
+
+            android:layout_width="100dp"
+            android:layout_height="30dp"
+            android:text="Product Name"
+            android:textColor="@color/black"
+            android:layout_marginLeft="5dp"
+            android:textSize="14sp"/>
+        <Spinner
+            android:layout_width="168dp"
+            android:layout_height="30dp"
+            android:id="@+id/products"
+            android:layout_marginLeft="12dp"
+            android:entries="@array/Products"/>
+
+
+
+    </LinearLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/description"
+        android:layout_width="285dp"
+        android:layout_height="wrap_content"
+
+        app:hintTextColor="#A6E45D"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linear"
+
+        app:layout_constraintVertical_bias="0.052"
+        app:layout_constraintHorizontal_bias="0.52">
+
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Description"
+            android:inputType="text"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/quantity"
+        android:layout_width="285dp"
+        android:layout_height="wrap_content"
+
+        app:hintTextColor="#A6E45D"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/description"
+
+        app:layout_constraintVertical_bias="0.052"
+        app:layout_constraintHorizontal_bias="0.52">
+
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Quantity"
+            android:inputType="number"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/price"
+        android:layout_width="285dp"
+        android:layout_height="wrap_content"
+
+        app:hintTextColor="#A6E45D"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/quantity"
+
+        app:layout_constraintVertical_bias="0.052"
+        app:layout_constraintHorizontal_bias="0.52">
+
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Price"
+            android:inputType="text"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+    <Button
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/add"
+        android:background="@color/darkgrey"
+        app:layout_constraintTop_toBottomOf="@+id/price"
+        android:text="Add"
+        android:textColor="#A6E45D"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+
+        app:layout_constraintVertical_bias="0.30"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
