@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".farmer.AddProduct">
+    tools:context=".farmer.AddProduct"
+    android:background="@drawable/farmers">
     <ImageButton
         android:layout_width="130dp"
         android:layout_height="130dp"
@@ -33,16 +34,20 @@
 
             android:layout_width="100dp"
             android:layout_height="30dp"
-            android:text="Product Name"
-            android:textColor="@color/black"
             android:layout_marginLeft="5dp"
-            android:textSize="14sp"/>
+            android:text="Product Name"
+
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
         <Spinner
+            android:id="@+id/products"
             android:layout_width="168dp"
             android:layout_height="30dp"
-            android:id="@+id/products"
             android:layout_marginLeft="12dp"
-            android:entries="@array/Products"/>
+            android:background="#F4F2F2"
+            android:entries="@array/Products" />
 
 
 
@@ -52,6 +57,7 @@
         android:id="@+id/description"
         android:layout_width="285dp"
         android:layout_height="wrap_content"
+
 
         app:hintTextColor="#A6E45D"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -67,6 +73,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Description"
+            android:textColor="@color/white"
             android:inputType="text"/>
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -89,6 +96,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Quantity"
+            android:textColor="@color/white"
             android:inputType="number"/>
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -111,6 +119,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Price"
+            android:textColor="@color/white"
             android:inputType="text"/>
 
     </com.google.android.material.textfield.TextInputLayout>
