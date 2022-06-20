@@ -2,6 +2,7 @@ package com.example.app.farmer;
 
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.Manifest;
@@ -17,14 +18,19 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.example.app.BottomNavigationFarmer;
+import com.example.app.FarmerPage;
+import com.example.app.FarmerRegistration;
 import com.example.app.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -36,26 +42,34 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.yalantis.ucrop.UCrop;
+import com.yalantis.ucrop.view.CropImageView;
+
+import java.io.File;
 import java.util.UUID;
 //import com.theartofdev.edmodo.cropper.CropImage;
 //import com.theartofdev.edmodo.cropper.CropImageView;
 
 public class AddProduct extends AppCompatActivity {
 
-    ImageButton imageButton;
+   /* ImageButton imageButton;
     Button addP;
     Spinner Items;
     TextInputLayout dp, qt, pc;
     String des, quan, prod, price;
-    Uri imguri;
+
     private  Uri mcimguri;
-    FirebaseStorage storage;
-    StorageReference storageReference;
+
+
     FirebaseDatabase firebaseDatabase;
     DatabaseReference databaseReference, data;
     FirebaseAuth Fauth;
-    StorageReference ref;
-    String FarmerId, RandomUID;
+
+    String FarmerId, RandomUID; */
+   ImageView imageView;
+   Uri imguri;
+    FirebaseStorage storage;
+    StorageReference storageReference;
 
 
     @Override
@@ -63,7 +77,35 @@ public class AddProduct extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_product);
 
+       imageView = findViewById(R.id.imageView);
+       storage= FirebaseStorage.getInstance();
+       storageReference = storage.getReference();
 
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                choosePicture();
+            }
+        });
+    }
+
+    private void choosePicture() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(intent, 1);
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1 && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            imguri = data.getData();
+            imageView.setImageURI(imguri);
+            uploadImage();
+        }
+
+
+      /*  imageButton = (ImageButton) findViewById(R.id.Upload);
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
         Items = (Spinner) findViewById(R.id.products);
@@ -82,10 +124,11 @@ public class AddProduct extends AppCompatActivity {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     Farmer farmerr = snapshot.getValue(Farmer.class);
-                    imageButton = (ImageButton) findViewById(R.id.Upload);
+                    //imageButton = (ImageButton) findViewById(R.id.Upload);
                     imageButton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+
                             onSelectImageClick(v);
                         }
                     });
@@ -109,13 +152,35 @@ public class AddProduct extends AppCompatActivity {
 
                 }
             });
+
         } catch (Exception e) {
 
             Log.e("Error: ", e.getMessage());
         }
     }
 
-    private void uploadImage() {
+
+    private void onSelectImageClick(View v) {
+
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(intent, 1);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1 && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            imguri = data.getData();
+            imageButton.setImageURI(imguri);
+            uploadImage();
+        }
+    }
+
+
+
+     private void uploadImage() {
         if (imguri != null) {
             final ProgressDialog progressDialog = new ProgressDialog(AddProduct.this);
             progressDialog.setTitle("Uploading...");
@@ -200,7 +265,12 @@ public class AddProduct extends AppCompatActivity {
         return isvalid;
     }
 
-    private void startCropImageActivity(Uri imguri) {
+
+
+
+
+
+   /* private void startCropImageActivity(Uri imguri) {
 
         CropImage.activity(imguri)
                 .setGuidelines(CropImageView.Guidelines.ON)
@@ -247,9 +317,48 @@ public class AddProduct extends AppCompatActivity {
         }
 
         super.onActivityResult(requestCode, resultCode, data);
-    }
+    } */
+
+
+
+
+
 
 }
+
+    private void uploadImage() {
+
+        final ProgressDialog pa = new ProgressDialog(this);
+        pa.setTitle("uploading.....");
+        pa.show();
+        final String randomKey =UUID.randomUUID().toString();
+
+        StorageReference riversRef = storageReference.child("images/" + randomKey);
+
+        riversRef.putFile(imguri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                pa.dismiss();
+                Snackbar.make(findViewById(android.R.id.content), "image uploaded", Snackbar.LENGTH_LONG).show();
+
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                pa.dismiss();
+                Toast.makeText(getApplicationContext(), "failed", Toast.LENGTH_LONG).show();
+
+
+            }
+        }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onProgress(@NonNull UploadTask.TaskSnapshot taskSnapshot) {
+                double progressPercent = (100.00 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
+                pa.setMessage("percentage: " +(int) progressPercent + "%");
+            }
+        });
+    }
+    }
 
 
 

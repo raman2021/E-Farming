@@ -57,7 +57,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".farmer.AddProduct" />
-        <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity"/>
+      <activity android:name="com.yalantis.ucrop.UCropActivity"/>
     </application>
 
 </manifest>

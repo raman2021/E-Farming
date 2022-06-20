@@ -33,24 +33,25 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FarmerFrag extends Fragment {
-    RecyclerView recyclerView;
-    private List<UpdateProduct> updateProductList;
-    private FHomeAdapter adapter;
+    // RecyclerView recyclerView;
+    // private List<UpdateProduct> updateProductList;
+    //private FHomeAdapter adapter;
     DatabaseReference databaseReference, data;
     SwipeRefreshLayout swipeRefreshLayout;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.farmerfrag, null);
         getActivity().setTitle("Home");
         setHasOptionsMenu(true);
-        recyclerView = view.findViewById(R.id.recycler);
-        recyclerView.setHasFixedSize(true);
+        // recyclerView = view.findViewById(R.id.recycler);
+        // recyclerView.setHasFixedSize(true);
         //Animation animation = AnimationUtils.loadAnimation(getContext(), R.anim.zoom);
-       // recyclerView.startAnimation(animation);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        updateProductList = new ArrayList<>();
-        String userid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        // recyclerView.startAnimation(animation);
+        //  recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        //  updateProductList = new ArrayList<>();
+       /* String userid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         data = FirebaseDatabase.getInstance().getReference("Farmer").child(userid);
         data.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -64,14 +65,14 @@ public class FarmerFrag extends Fragment {
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
-        });
-       // swipeRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.swipe);
+        }); */
+        // swipeRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.swipe);
         //swipeRefreshLayout.setOnRefreshListener(this);
-       // swipeRefreshLayout.setColorSchemeResources(R.color.darkgrey, R.color.green);
+        // swipeRefreshLayout.setColorSchemeResources(R.color.darkgrey, R.color.green);
         return view;
     }
 
-    private void fProducts() {
+   /* private void fProducts() {
 
         String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("ItemDetails").child(uid);
@@ -93,13 +94,12 @@ public class FarmerFrag extends Fragment {
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
-        });
+        }); */
 
 
 
 
-    }
-
+//}
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         inflater.inflate(R.menu.logout,menu);
@@ -125,4 +125,9 @@ public class FarmerFrag extends Fragment {
         startActivity(intent);
     }
 }
+
+
+
+
+
 
