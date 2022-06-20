@@ -52,24 +52,20 @@ import java.util.UUID;
 
 public class AddProduct extends AppCompatActivity {
 
-   /* ImageButton imageButton;
+
     Button addP;
     Spinner Items;
     TextInputLayout dp, qt, pc;
     String des, quan, prod, price;
-
-    private  Uri mcimguri;
-
-
+    ImageButton imageButton;
     FirebaseDatabase firebaseDatabase;
     DatabaseReference databaseReference, data;
     FirebaseAuth Fauth;
-
-    String FarmerId, RandomUID; */
-   ImageView imageView;
-   Uri imguri;
+    ProgressDialog progressDialog;
+    Uri imguri = null;
     FirebaseStorage storage;
     StorageReference storageReference;
+    private static final int Gallery_Code = 1;
 
 
     @Override
@@ -77,288 +73,84 @@ public class AddProduct extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_product);
 
-       imageView = findViewById(R.id.imageView);
-       storage= FirebaseStorage.getInstance();
-       storageReference = storage.getReference();
+        imageButton = findViewById(R.id.imageView);
 
-        imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                choosePicture();
-            }
-        });
-    }
-
-    private void choosePicture() {
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(intent, 1);
-    }
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1 && resultCode == RESULT_OK && data != null && data.getData() != null) {
-            imguri = data.getData();
-            imageView.setImageURI(imguri);
-            uploadImage();
-        }
-
-
-      /*  imageButton = (ImageButton) findViewById(R.id.Upload);
-        storage = FirebaseStorage.getInstance();
-        storageReference = storage.getReference();
         Items = (Spinner) findViewById(R.id.products);
         dp = (TextInputLayout) findViewById(R.id.description);
         qt = (TextInputLayout) findViewById(R.id.quantity);
         pc = (TextInputLayout) findViewById(R.id.price);
         addP = (Button) findViewById(R.id.add);
-        Fauth = FirebaseAuth.getInstance();
-        databaseReference = firebaseDatabase.getInstance("https://e-farming-c93ab-default-rtdb.firebaseio.com/").getReference("ItemDetails");
-
-        try {
-
-            String userid =  FirebaseAuth.getInstance().getCurrentUser().getUid();
-            data = firebaseDatabase.getInstance().getReference("Farmer").child(userid);
-            data.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    Farmer farmerr = snapshot.getValue(Farmer.class);
-                    //imageButton = (ImageButton) findViewById(R.id.Upload);
-                    imageButton.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-
-                            onSelectImageClick(v);
-                        }
-                    });
-                    addP.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            prod = Items.getSelectedItem().toString().trim();
-                            des = dp.getEditText().getText().toString().trim();
-                            quan = qt.getEditText().getText().toString().trim();
-                            price = pc.getEditText().getText().toString().trim();
-
-                            if (isValid()) {
-                                uploadImage();
-                            }
-                        }
-                    });
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                }
-            });
-
-        } catch (Exception e) {
-
-            Log.e("Error: ", e.getMessage());
-        }
-    }
+        storage = FirebaseStorage.getInstance();
+        storageReference = storage.getReference();
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        databaseReference = firebaseDatabase.getInstance().getReference("ItemDetails");
+        progressDialog = new ProgressDialog(this);
 
 
-    private void onSelectImageClick(View v) {
+        imageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent((Intent.ACTION_GET_CONTENT));
+                intent.setType("image/*");
 
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(intent, 1);
+                startActivityForResult(intent, Gallery_Code);
+            }
+        });
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1 && resultCode == RESULT_OK && data != null && data.getData() != null) {
+        if (requestCode == Gallery_Code && resultCode == RESULT_OK) {
             imguri = data.getData();
             imageButton.setImageURI(imguri);
-            uploadImage();
+
         }
-    }
 
+        addP.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                prod = Items.getSelectedItem().toString().trim();
+                des = dp.getEditText().getText().toString().trim();
+                quan = qt.getEditText().getText().toString().trim();
+                price = pc.getEditText().getText().toString().trim();
 
+                if (!(prod.isEmpty() && des.isEmpty() && quan.isEmpty() && price.isEmpty() && imguri != null)) {
 
-     private void uploadImage() {
-        if (imguri != null) {
-            final ProgressDialog progressDialog = new ProgressDialog(AddProduct.this);
-            progressDialog.setTitle("Uploading...");
-            progressDialog.show();
-            RandomUID = UUID.randomUUID().toString();
-            ref = storageReference.child(RandomUID);
-            FarmerId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-            ref.putFile(imguri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    progressDialog.setTitle("Uploading......");
+                    progressDialog.show();
+
+                    StorageReference filepath = storage.getReference().child("image").child(imguri.getLastPathSegment());
+                    filepath.putFile(imguri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
-                        public void onSuccess(Uri uri) {
-                            ItemDetails info = new ItemDetails(prod, quan, price, des, String.valueOf(uri), RandomUID, FarmerId);
-                            firebaseDatabase.getInstance().getReference("ItemDetails").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(RandomUID)
-                                    .setValue(info).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<Void> task) {
-                                            progressDialog.dismiss();
-                                            Toast.makeText(AddProduct.this, "Item posted successfully", Toast.LENGTH_SHORT).show();
-
-
-                                        }
-                                    });
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            Task<Uri> downloadUrl = taskSnapshot.getStorage().getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Uri> task) {
+                                    String t = task.getResult().toString();
+                                    DatabaseReference newPost = databaseReference.push();
+                                    newPost.child("Description").setValue(des);
+                                    newPost.child("Quantity").setValue(quan);
+                                    newPost.child("product").setValue(prod);
+                                    newPost.child("Price").setValue(price);
+                                    newPost.child("image").setValue(task.getResult().toString());
+                                    progressDialog.dismiss();
+                                }
+                            });
                         }
                     });
                 }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    progressDialog.dismiss();
-                    Toast.makeText(AddProduct.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-
-                }
-            }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onProgress(@NonNull UploadTask.TaskSnapshot taskSnapshot) {
-                    double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
-                    progressDialog.setMessage("Uploaded " + (int) progress + "%");
-                    progressDialog.setCanceledOnTouchOutside(false);
-
-                }
-            });
-
-        }
 
 
-    }
-
-    private boolean isValid() {
-        dp.setErrorEnabled(false);
-        dp.setError("");
-        qt.setErrorEnabled(false);
-        qt.setError("");
-        pc.setErrorEnabled(false);
-        pc.setError("");
-
-        boolean isValiDescription = false, isValidPrice = false, isvalidQuantity = false, isvalid = false;
-        if (TextUtils.isEmpty(des)) {
-            dp.setErrorEnabled(true);
-            dp.setError("Description is Required");
-
-        } else {
-
-            dp.setError(null);
-            isValiDescription = true;
-        }
-        if (TextUtils.isEmpty(quan)) {
-            qt.setErrorEnabled(true);
-            qt.setError("Quantity is Required");
-        } else {
-            isvalidQuantity = true;
-        }
-        if (TextUtils.isEmpty(price)) {
-            pc.setErrorEnabled(true);
-            pc.setError("Price is Required");
-        } else {
-            isValidPrice = true;
-        }
-        isvalid = (isValiDescription && isvalidQuantity && isValidPrice) ? true : false;
-
-        return isvalid;
-    }
-
-
-
-
-
-
-   /* private void startCropImageActivity(Uri imguri) {
-
-        CropImage.activity(imguri)
-                .setGuidelines(CropImageView.Guidelines.ON)
-                .setMultiTouchEnabled(true)
-                .start(this);
-    }
-    private void onSelectImageClick(View v) {
-
-        CropImage.startPickImageActivity(this);
-    }
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-
-        //super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (mcimguri != null && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            startCropImageActivity(mcimguri);
-        } else {
-            Toast.makeText(this, "cancelling,required permission not granted", Toast.LENGTH_SHORT).show();
-        }
-    }
-    @Override
-    @SuppressLint("NewApi")
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == CropImage.PICK_IMAGE_CHOOSER_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-            imguri = CropImage.getPickImageResultUri(this, data);
-
-            if (CropImage.isReadExternalStoragePermissionsRequired(this, imguri)) {
-                mcimguri = imguri;
-                requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 0);
-
-            } else {
-
-                startCropImageActivity(imguri);
-            }
-        }
-        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
-            CropImage.ActivityResult result = CropImage.getActivityResult(data);
-            if (resultCode == RESULT_OK) {
-                ((ImageButton) findViewById(R.id.Upload)).setImageURI(result.getUri());
-                Toast.makeText(this, "Cropped Successfully", Toast.LENGTH_SHORT).show();
-            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                Toast.makeText(this, "Cropping failed" + result.getError(), Toast.LENGTH_SHORT).show();
-            }
-        }
-
-        super.onActivityResult(requestCode, resultCode, data);
-    } */
-
-
-
-
-
-
-}
-
-    private void uploadImage() {
-
-        final ProgressDialog pa = new ProgressDialog(this);
-        pa.setTitle("uploading.....");
-        pa.show();
-        final String randomKey =UUID.randomUUID().toString();
-
-        StorageReference riversRef = storageReference.child("images/" + randomKey);
-
-        riversRef.putFile(imguri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                pa.dismiss();
-                Snackbar.make(findViewById(android.R.id.content), "image uploaded", Snackbar.LENGTH_LONG).show();
-
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                pa.dismiss();
-                Toast.makeText(getApplicationContext(), "failed", Toast.LENGTH_LONG).show();
-
-
-            }
-        }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onProgress(@NonNull UploadTask.TaskSnapshot taskSnapshot) {
-                double progressPercent = (100.00 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
-                pa.setMessage("percentage: " +(int) progressPercent + "%");
             }
         });
+
+
+
+
+
     }
-    }
+}
 
 
 
