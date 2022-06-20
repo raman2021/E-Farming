@@ -42,7 +42,7 @@ import java.util.UUID;
 
 public class AddProduct extends AppCompatActivity {
 
-    ImageButton img;
+    ImageButton imageButton;
     Button addP;
     Spinner Items;
     TextInputLayout dp, qt, pc;
@@ -55,7 +55,7 @@ public class AddProduct extends AppCompatActivity {
     DatabaseReference databaseReference, data;
     FirebaseAuth Fauth;
     StorageReference ref;
-    String FarmerId, RaUID;
+    String FarmerId, RandomUID;
 
 
     @Override
@@ -76,19 +76,19 @@ public class AddProduct extends AppCompatActivity {
 
         try {
 
-            String uid =  FirebaseAuth.getInstance().getCurrentUser().getUid();
-            data = firebaseDatabase.getInstance().getReference("Farmer").child(uid);
-           /* data.addListenerForSingleValueEvent(new ValueEventListener() {
+            String userid =  FirebaseAuth.getInstance().getCurrentUser().getUid();
+            data = firebaseDatabase.getInstance().getReference("Farmer").child(userid);
+            data.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    Farmer farmerr = dataSnapshot.getValue(Farmer.class);
-                    img = (ImageButton) findViewById(R.id.Upload);
-                    img.setOnClickListener(new View.OnClickListener() {
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    Farmer farmerr = snapshot.getValue(Farmer.class);
+                    imageButton = (ImageButton) findViewById(R.id.Upload);
+                    imageButton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                           // onSelectImageClick(v);
+                            onSelectImageClick(v);
                         }
-                    }); */
+                    });
                     addP.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -100,24 +100,72 @@ public class AddProduct extends AppCompatActivity {
                             if (isValid()) {
                                 uploadImage();
                             }
-                            
                         }
                     });
+                }
 
-
-             /*  @Override
+                @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
 
                 }
-            }); */
-
+            });
         } catch (Exception e) {
 
             Log.e("Error: ", e.getMessage());
         }
     }
 
-    private boolean isValid () {
+    private void uploadImage() {
+        if (imguri != null) {
+            final ProgressDialog progressDialog = new ProgressDialog(AddProduct.this);
+            progressDialog.setTitle("Uploading...");
+            progressDialog.show();
+            RandomUID = UUID.randomUUID().toString();
+            ref = storageReference.child(RandomUID);
+            FarmerId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+            ref.putFile(imguri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            ItemDetails info = new ItemDetails(prod, quan, price, des, String.valueOf(uri), RandomUID, FarmerId);
+                            firebaseDatabase.getInstance().getReference("ItemDetails").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(RandomUID)
+                                    .setValue(info).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            progressDialog.dismiss();
+                                            Toast.makeText(AddProduct.this, "Item posted successfully", Toast.LENGTH_SHORT).show();
+
+
+                                        }
+                                    });
+                        }
+                    });
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    progressDialog.dismiss();
+                    Toast.makeText(AddProduct.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+
+                }
+            }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onProgress(@NonNull UploadTask.TaskSnapshot taskSnapshot) {
+                    double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
+                    progressDialog.setMessage("Uploaded " + (int) progress + "%");
+                    progressDialog.setCanceledOnTouchOutside(false);
+
+                }
+            });
+
+        }
+
+
+    }
+
+    private boolean isValid() {
         dp.setErrorEnabled(false);
         dp.setError("");
         qt.setErrorEnabled(false);
@@ -152,67 +200,30 @@ public class AddProduct extends AppCompatActivity {
         return isvalid;
     }
 
-    private void uploadImage() {
+    private void startCropImageActivity(Uri imguri) {
 
-        if (imguri != null) {
-            final ProgressDialog progressDialog = new ProgressDialog(AddProduct.this);
-            progressDialog.setTitle("Uploading...");
-            progressDialog.show();
-            RaUID = UUID.randomUUID().toString();
-            ref = storageReference.child(RaUID);
-            FarmerId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-            ref.putFile(imguri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                        @Override
-                        public void onSuccess(Uri uri) {
-                                ItemDetails info = new ItemDetails(prod, quan, price, des, String.valueOf(uri), RaUID, FarmerId);
-                                firebaseDatabase.getInstance().getReference("ItemDetails").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(RaUID)
-                                        .setValue(info).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                            @Override
-                                            public void onComplete(@NonNull Task<Void> task) {
-                                                progressDialog.dismiss();
-                                                Toast.makeText(AddProduct.this, "Item posted successfully", Toast.LENGTH_SHORT).show();
-                                        }
-                                    });
-                        }
-                    });
-
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-
-                    progressDialog.dismiss();
-                    Toast.makeText(AddProduct.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                }
-            }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-
-                    double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
-                    progressDialog.setMessage("Uploaded " + (int) progress + "%");
-                    progressDialog.setCanceledOnTouchOutside(false);
-                }
-            });
-        }
-
+        CropImage.activity(imguri)
+                .setGuidelines(CropImageView.Guidelines.ON)
+                .setMultiTouchEnabled(true)
+                .start(this);
     }
-
-
-
-  /*  private void onSelectImageClick(View v) {
+    private void onSelectImageClick(View v) {
 
         CropImage.startPickImageActivity(this);
     }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 
+        //super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (mcimguri != null && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            startCropImageActivity(mcimguri);
+        } else {
+            Toast.makeText(this, "cancelling,required permission not granted", Toast.LENGTH_SHORT).show();
+        }
+    }
     @Override
     @SuppressLint("NewApi")
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-
         if (requestCode == CropImage.PICK_IMAGE_CHOOSER_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             imguri = CropImage.getPickImageResultUri(this, data);
 
@@ -225,7 +236,6 @@ public class AddProduct extends AppCompatActivity {
                 startCropImageActivity(imguri);
             }
         }
-
         if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
             if (resultCode == RESULT_OK) {
@@ -236,38 +246,9 @@ public class AddProduct extends AppCompatActivity {
             }
         }
 
-
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        
-        
-        
-        
-        if (mcimguri != null && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            startCropImageActivity(mcimguri);
-        } else {
-            Toast.makeText(this, "cancelling,required permission not granted", Toast.LENGTH_SHORT).show();
-        }
-    }
-   
-        
-
-    private void startCropImageActivity(Uri imguri) {
-        
-        CropImage.activity(imguri)
-                .setGuidelines(CropImageView.Guidelines.ON)
-                .setMultiTouchEnabled(true)
-                .start(this);
-
-
-    } */
 }
 
 

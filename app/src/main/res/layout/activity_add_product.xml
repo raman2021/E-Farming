@@ -6,7 +6,9 @@
     android:layout_height="match_parent"
     tools:context=".farmer.AddProduct"
     android:background="@drawable/farmers">
-    <ImageButton
+
+
+    <com.theartofdev.edmodo.cropper.CropImageView
         android:layout_width="130dp"
         android:layout_height="130dp"
         android:background="@drawable/camerabutton"
@@ -120,7 +122,7 @@
             android:layout_height="wrap_content"
             android:hint="Price"
             android:textColor="@color/white"
-            android:inputType="text"/>
+            android:inputType="number"/>
 
     </com.google.android.material.textfield.TextInputLayout>
     <Button
