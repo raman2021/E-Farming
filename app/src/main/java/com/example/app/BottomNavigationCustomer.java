@@ -23,7 +23,7 @@ public class BottomNavigationCustomer extends AppCompatActivity implements Botto
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bottom_navigation_customer);
 
-        BottomNavigationView navigationView = findViewById(R.id.bottom_navigation);
+       /* BottomNavigationView navigationView = findViewById(R.id.bottom_navigation);
         navigationView.setOnNavigationItemSelectedListener(this);
         String name = getIntent().getStringExtra("Page");
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -40,7 +40,7 @@ public class BottomNavigationCustomer extends AppCompatActivity implements Botto
             }
         }else{
             loadFragment(new CustomerFrag());
-        }
+        } */
 
     }
 
@@ -49,7 +49,7 @@ public class BottomNavigationCustomer extends AppCompatActivity implements Botto
         Fragment fragment = null;
         switch (item.getItemId()) {
             case R.id.cHome:
-                fragment = new CustomerFrag();
+              //  fragment = new CustomerFrag();
                 break;
 
 

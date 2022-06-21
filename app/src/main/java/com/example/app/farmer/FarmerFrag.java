@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -33,9 +34,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FarmerFrag extends Fragment {
-    // RecyclerView recyclerView;
-    // private List<UpdateProduct> updateProductList;
-    //private FHomeAdapter adapter;
+
+
+    RecyclerView recyclerView;
+    private List<UpdateProduct> updateProductList;
+    private FHomeAdapter adapter;
     DatabaseReference databaseReference, data;
     SwipeRefreshLayout swipeRefreshLayout;
 
@@ -44,14 +47,17 @@ public class FarmerFrag extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.farmerfrag, null);
         getActivity().setTitle("Home");
-        setHasOptionsMenu(true);
-        // recyclerView = view.findViewById(R.id.recycler);
-        // recyclerView.setHasFixedSize(true);
-        //Animation animation = AnimationUtils.loadAnimation(getContext(), R.anim.zoom);
-        // recyclerView.startAnimation(animation);
-        //  recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        //  updateProductList = new ArrayList<>();
-       /* String userid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+
+       /* setHasOptionsMenu(true);
+
+         recyclerView = view.findViewById(R.id.recycler);
+         recyclerView.setHasFixedSize(true);
+        Animation animation = AnimationUtils.loadAnimation(getContext(), R.anim.zoom);
+         recyclerView.startAnimation(animation);
+          recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+          updateProductList = new ArrayList<>();
+        String userid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         data = FirebaseDatabase.getInstance().getReference("Farmer").child(userid);
         data.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -94,15 +100,15 @@ public class FarmerFrag extends Fragment {
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
-        }); */
+        });*/
+   // }
 
 
 
 
-//}
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        inflater.inflate(R.menu.logout,menu);
+        inflater.inflate(R.menu.logout, menu);
     }
 
     @Override
@@ -121,10 +127,13 @@ public class FarmerFrag extends Fragment {
     private void LogOut() {
         FirebaseAuth.getInstance().signOut();
         Intent intent = new Intent(getActivity(), ShopPage.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
     }
 }
+
+
+
 
 
 

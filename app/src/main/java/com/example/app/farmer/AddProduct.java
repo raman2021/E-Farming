@@ -131,9 +131,9 @@ public class AddProduct extends AppCompatActivity {
                                     DatabaseReference newPost = databaseReference.push();
                                     newPost.child("Description").setValue(des);
                                     newPost.child("Quantity").setValue(quan);
-                                    newPost.child("product").setValue(prod);
-                                    newPost.child("Price").setValue(price);
-                                    newPost.child("image").setValue(task.getResult().toString());
+                                    newPost.child("Product").setValue(prod);
+                                    newPost.child("Price : $").setValue(price);
+                                    newPost.child("Image").setValue(task.getResult().toString());
                                     progressDialog.dismiss();
                                 }
                             });
